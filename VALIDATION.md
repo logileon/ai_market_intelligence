@@ -12,7 +12,9 @@ The snapshot retains **8,299 daily price observations**, **12,096 STEO monthly o
 
 ## Automated checks
 
-**Result: 27 tests passed in 50.285 seconds (OK).**
+**Latest result: 29 tests passed in 141.587 seconds (OK).**
+
+CI timeout fix (26 October 2026): all four Streamlit AppTest runs in tests/test_app.py now explicitly allow 60 seconds. Two interaction reruns previously inherited the 3-second default and could time out on a shared GitHub runner. Assertions and test coverage are unchanged. The fix was verified locally; a new GitHub workflow run is required to verify the hosted runner.
 
 The original 24 regression tests cover ingestion, URL deduplication, history retention under source failure, formula-safe Excel export, original workbook provenance, checksum verification, balance reconciliation, day-weighted aggregation, incomplete periods, vintage comparison, crack spread units/yields, missing dates, secret handling and scenario signs. Streamlit AppTest exercises empty and populated data, search, vintage/frequency selection, WTI/Brent switching and scenario controls.
 
@@ -23,3 +25,14 @@ Additional English edition checks scan interface code and documentation, inspect
 The earlier local browser preview could not start because Windows rejected the listening socket (WinError 10013). This edition is checked with Streamlit AppTest; browser layout has not been visually verified. No new browser preview is claimed.
 
 The project has not been published to the user's GitHub or Streamlit account. GitHub Actions was configured but not executed in the user's account. No API key is included. Configure NEWSAPI_KEY for future updates and use a NewsAPI plan appropriate for production. Successful requests made on 24 October do not verify the account's production entitlement.
+
+
+## Intraday oil extension — 26 October 2026
+
+Official TradingView widgets display TVC:USOIL and TVC:UKOIL CFD quotes in a new Intraday oil tab and an Overview ticker strip. No API key or market snapshot refresh is used for the new display. The external feed is kept out of SQLite, Excel and EIA/FRED crack calculations.
+
+Two additional tests verify source attribution and explicit benchmark/interval settings, plus Streamlit controls for side-by-side/single layout, Brent selection, candle intervals and reconnect behaviour. The integration test rejects unexpected server-side price requests. The complete suite passed: 29 tests, 141.587 seconds.
+
+Browser verification: the configured WTI and Brent 5-minute TradingView charts loaded successfully with provider prices, candles and market status. WTI prices changed between observations; the status indicated Market open / One update per second at the time of verification. The two-symbol ticker also displayed both quotes and daily changes. These observations do not guarantee future feed latency or availability.
+
+A local Streamlit server started at port 8765, but the in-app browser could not reach that local address (connection timeout). Thus the provider widgets were verified separately, while the application integration was exercised with Streamlit AppTest. Rendering of the nested widgets on the user's deployed Streamlit page still requires a post-deployment check. No GitHub push or Streamlit deployment was performed.

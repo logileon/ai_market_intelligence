@@ -10,6 +10,7 @@ from market.steo_ui import render_steo
 from market.analysis import analyze
 from market.desk_ui import render_refining, render_scenarios, render_quality
 from market.refining import crack_series
+from market.intraday import render_intraday, render_quote_strip
 
 st.set_page_config(page_title="Oil Market Intelligence", page_icon="🛢️", layout="wide")
 profile = json.loads((ROOT / "config/profile.json").read_text(encoding="utf-8"))
@@ -64,7 +65,10 @@ k1, k2, k3 = st.columns(3)
 k1.metric("Articles in selection", len(filtered))
 k2.metric("Sources in selection", filtered.source.nunique())
 k3.metric("Risk mentions", int(filtered.signal.isin(["Risk mention", "Mixed mentions"]).sum()))
-overview, price_tab, steo_tab, scenario_tab, feed_tab, method_tab, source_tab = st.tabs(["Overview", "Crack spreads & refining", "EIA balances & forecasts", "Balance scenarios", "News & export", "Methodology", "Sources & data quality"])
+overview, intraday_tab, price_tab, steo_tab, scenario_tab, feed_tab, method_tab, source_tab = st.tabs(["Overview", "Intraday oil", "Crack spreads & refining", "EIA balances & forecasts", "Balance scenarios", "News & export", "Methodology", "Sources & data quality"])
+
+with intraday_tab:
+    render_intraday()
 
 with steo_tab:
     render_steo()
@@ -73,7 +77,8 @@ with scenario_tab:
     render_scenarios()
 
 with overview:
-    st.subheader("Market pulse")
+    render_quote_strip()
+    st.subheader("Daily spot reference | EIA / FRED")
     pulse = st.columns(3)
     for col, code in zip(pulse[:2], ["DCOILBRENTEU", "DCOILWTICO"]):
         rows = prices[prices.series == code].sort_values("date")
@@ -146,6 +151,7 @@ with method_tab:
 """)
 
 with source_tab:
+    st.info("Intraday oil uses official TradingView display widgets (TVC:USOIL / TVC:UKOIL CFDs). The feed loads in each visitor's browser independently of the saved EIA/FRED snapshot and the GitHub collection schedule. Intraday quotes are excluded from exports and crack spread inputs.")
     render_quality(news, prices, runs)
     st.subheader("Data provenance & collection log")
     st.dataframe(pd.DataFrame(json.loads((ROOT / "config/sources.json").read_text(encoding="utf-8"))), hide_index=True, use_container_width=True)

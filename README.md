@@ -4,9 +4,19 @@ An English-language research dashboard for crude oil, refined products and globa
 
 English edition prepared on **26 October 2026**. The included market snapshot was collected on **24 October 2026**; this translation does not refresh market data. All timestamps are UTC, dates use YYYY-MM-DD, prices use USD/bbl or USD/gal and flow rates use million b/d.
 
+## Intraday oil monitor (26 October 2026)
+
+The Overview now includes a WTI/Brent quote strip, and the new **Intraday oil** tab displays two interactive charts. Sources: TradingView widgets, TVC:USOIL (WTI CFD) and TVC:UKOIL (Brent CFD), quoted in USD/bbl.
+
+Quotes are loaded directly in the visitor's browser and update as the provider sends new prices during market hours. There is no extra API key or scheduled collection needed for this display. Choose 1-minute, 5-minute, 15-minute or 1-hour candles and either side-by-side or single-chart layout. Candle interval sets bar aggregation, not the update frequency. **Reconnect quote feed** reloads the embedded components.
+
+These are CFD indicators rather than EIA physical spot assessments or a specified exchange futures contract. Provider-controlled delay and availability can change; check the market status indicator in the chart. Closed markets retain the last available price. Provider attribution is preserved. Intraday values are not scraped, stored, exported or mixed into the EIA/FRED crack calculations.
+
+If an embedded chart is blocked, allow the TradingView scripts/frames or follow the direct instrument link. See the [TradingView widget data FAQ](https://www.tradingview.com/widget-docs/faq/data/).
+
 ## Features
 
-- **Overview:** dated Brent and WTI observations, an indicative 3:2:1 crack, news activity charts and a rules-based digest with publication timestamps.
+- **Overview:** an intraday CFD quote strip plus dated EIA Brent and WTI observations, an indicative 3:2:1 crack, news activity charts and a rules-based digest with publication timestamps.
 - **Crack spreads & refining:** gasoline, ULSD and 3:2:1 spot cracks; WTI/Brent selection; seasonal comparisons; underlying prices and Brent–WTI.
 - **EIA balances & forecasts:** world liquid fuels supply, demand and implied balances; regional and product indicators; seven original EIA vintages; revisions and forecast evolution.
 - **Balance scenarios:** supply and demand shocks applied to a fully forecast quarter, implied stock changes and a sensitivity matrix.

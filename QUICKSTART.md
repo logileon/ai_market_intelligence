@@ -12,3 +12,7 @@
 All dashboard labels, explanatory text and documentation are English. NewsAPI requests English articles. Cyrillic source articles are excluded from the English snapshot; the previous bilingual version is retained separately. The saved market data was collected on 24 October 2026 and has not been refreshed during translation.
 
 No API key is included. Configure NEWSAPI_KEY as described in README.md for future collections. Production use requires an appropriate NewsAPI plan. The project has not been published to a hosting account.
+
+## Intraday prices
+
+The Overview shows WTI and Brent CFD quotes from TradingView. Open **Intraday oil** for charts, candle intervals and market status. The external feed updates while the browser is connected during market hours; it does not wait for GitHub Actions. No additional API key is needed. The EIA/FRED daily spot archive and crack calculations remain separate. Use **Reconnect quote feed** or the source links if a widget is unavailable.
