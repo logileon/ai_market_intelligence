@@ -1,0 +1,39 @@
+name: Update market data
+on:
+  schedule:
+    - cron: '17 5,17 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: market-data-update
+  cancel-in-progress: false
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Collect public data
+        env:
+          NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+        run: python update_data.py
+      - name: Test saved data and application
+        run: python -m unittest discover -s tests -v
+      - name: Publish persistent snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/market.db data/steo/
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "data: refresh oil market snapshot"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi

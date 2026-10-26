@@ -1,0 +1,14 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.streamlit/secrets.toml
+.env
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+# data/market.db intentionally versioned: durable snapshot for free deployment.
+
+data/tmp*/
+data/steo/raw/*.tmp

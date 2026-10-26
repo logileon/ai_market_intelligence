@@ -1,0 +1,5 @@
+[
+  {"name": "EIA Today in Energy", "url": "https://www.eia.gov/rss/todayinenergy.xml", "enabled": true},
+  {"name": "Offshore Energy", "url": "https://www.offshore-energy.biz/feed/", "enabled": true},
+  {"name": "Google News: oil & products", "url": "https://news.google.com/rss/search?q=%22crude+oil%22+OR+refinery+OR+diesel+OR+OPEC&hl=en-US&gl=US&ceid=US:en", "enabled": true}
+]
