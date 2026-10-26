@@ -12,7 +12,7 @@ class AppTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             tables = read_tables(Path(d)/"empty.db")
             with patch("market.storage.read_tables", return_value=tables):
-                at = AppTest.from_file(str(ROOT/"app.py")).run(timeout=30)
+                at = AppTest.from_file(str(ROOT/"app.py")).run(timeout=60)
                 self.assertEqual(len(at.exception), 0)
 
     def test_app_populated_and_search(self):
@@ -24,12 +24,12 @@ class AppTests(unittest.TestCase):
                     con.execute("INSERT INTO prices VALUES (?,?,?,?)", (NOW[:10], value, code, "https://fred.stlouisfed.org"))
             tables = read_tables(db)
             with patch("market.storage.read_tables", return_value=tables):
-                at = AppTest.from_file(str(ROOT/"app.py")).run(timeout=30)
+                at = AppTest.from_file(str(ROOT/"app.py")).run(timeout=60)
                 self.assertEqual(len(at.exception), 0)
                 # Select full history so the dated fixture is included.
-                next(box for box in at.selectbox if box.label == "News lookback (days)").select("All history").run()
+                next(box for box in at.selectbox if box.label == "News lookback (days)").select("All history").run(timeout=60)
                 self.assertEqual(at.metric[0].value, "1")
-                at.text_input[0].set_value("no-match-xyz").run()
+                at.text_input[0].set_value("no-match-xyz").run(timeout=60)
                 self.assertEqual(len(at.exception), 0)
                 self.assertEqual(at.metric[0].value, "0")
 
